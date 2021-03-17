@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
+import math
 import scipy.stats as st
-
 
 
 # Calculate log return
@@ -37,7 +37,8 @@ def generate_log_return(df):
 #
 def normal_simulation(df, ptrim=0.01):
     if df.ndim == 1:
-        df_norm = st.norm(loc=np.mean(df), scale=np.std(df))
+        mean, stdev = st.norm.fit(df)
+        df_norm = st.norm(loc=mean, scale=stdev)
         dist = df_norm.pdf(np.linspace(st.norm.ppf(ptrim), st.norm.ppf(1-ptrim), 100))
     else:
         dist = df.apply(lambda x: normal_simulation(x, ptrim))
@@ -55,16 +56,15 @@ def confidence_interval(df, alpha):
     return st.norm.interval(alpha=alpha, loc=np.mean(df), scale=np.std(df))
 
 
-# Hypothesis Test: Mean return is equal some value?
+# Hypothesis Test: Mean annual return is equal some value?
 # Input:
 # - df: Dataframe with log return of assets
-# - hyp_alt: Alternative hypothesis (value of the mean return)
+# - ret: Alternative hypothesis (value of the mean return)
 # - alpha: significance level
 # Output:
 # - If alternative hypothesis is True or False
 #
-def hyp_return_is(df, hyp_alt, alpha):
-    ci = confidence_interval(df, alpha)
-    return ci[0] <= hyp_alt <= ci[1]
-
-
+def hyp_annual_return_is(df, ret, alpha):
+    ret_daily = math.pow(ret + 1, 1/len(df.index)) - 1
+    tstat, pvalue = st.ttest_1samp(df, ret_daily)
+    return pvalue >= alpha
