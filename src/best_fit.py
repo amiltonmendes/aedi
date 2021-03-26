@@ -98,3 +98,9 @@ def make_pdf(dist, params, size=10000):
 
     return pdf
 
+def train_linear_model(x,y):
+    model = LinearRegression().fit(x, y)
+    r_sq = model.score(x, y)
+    intercept = model.intercept_
+    coefficient = model.coef_
+    return(intercept,coefficient,r_sq,model)
