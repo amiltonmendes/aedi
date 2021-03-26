@@ -9,6 +9,8 @@ import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.linear_model import LinearRegression
+from scipy import stats
+import statsmodels.api as sm
 
 matplotlib.rcParams['figure.figsize'] = (16.0, 12.0)
 matplotlib.style.use('ggplot')
@@ -104,3 +106,8 @@ def train_linear_model(x,y):
     intercept = model.intercept_
     coefficient = model.coef_
     return(intercept,coefficient,r_sq,model)
+def get_anova(x,y):
+    X2 = sm.add_constant(x)
+    est = sm.OLS(y, X2)
+    est2 = est.fit()
+    print(est2.summary())
