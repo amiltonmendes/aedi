@@ -7,6 +7,8 @@ import pandas as pd
 import scipy.stats as st
 import matplotlib
 import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.linear_model import LinearRegression
 
 matplotlib.rcParams['figure.figsize'] = (16.0, 12.0)
 matplotlib.style.use('ggplot')
