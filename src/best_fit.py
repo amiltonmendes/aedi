@@ -106,8 +106,14 @@ def train_linear_model(x,y):
     intercept = model.intercept_
     coefficient = model.coef_
     return(intercept,coefficient,r_sq,model)
+
 def get_anova(x,y):
     X2 = sm.add_constant(x)
     est = sm.OLS(y, X2)
     est2 = est.fit()
-    print(est2.summary())
+    return est2
+
+def hyp_has_unit_root(x, alpha):
+    results = sm.tsa.adfuller(x)
+    reject_null = results[1] < alpha
+    return not reject_null

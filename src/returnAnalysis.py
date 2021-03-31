@@ -68,4 +68,5 @@ def confidence_interval(df, alpha):
 def hyp_annual_return_is(df, ret, alpha):
     ret_daily = math.pow(ret + 1, 1/len(df.index)) - 1
     tstat, pvalue = st.ttest_1samp(df, ret_daily)
-    return pvalue >= alpha
+    reject_null = pvalue < alpha
+    return not reject_null
