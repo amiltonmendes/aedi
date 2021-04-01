@@ -23,6 +23,8 @@ def log_return(value_init, value_final):
 # - Dataframe with log return of assets
 #
 def generate_log_return(df):
+    df['date'] = pd.to_datetime(df.date)
+    df.sort_values('date', inplace=True)
     df_return = pd.DataFrame(columns=df.columns[1:])
     df_return['ibov'] = log_return(df.ibov.shift(periods=1, fill_value=df['ibov'].iloc[0]), df.ibov)
     df_return['tots3'] = log_return(df.tots3.shift(periods=1, fill_value=df['tots3'].iloc[0]), df.tots3)
